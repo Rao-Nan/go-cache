@@ -71,3 +71,33 @@ func (table *CacheTable)   SetAboutToDeleteItemCallback(f func(*CacheItem))  {
 	defer table.UnLock()
 	table.aboutToDeleteItem = append(table.aboutToDeleteItem,f)
 }
+
+func (table *CacheTable) RemoveAboutToDeleteItemCallback(){
+	table.Lock()
+	defer table.UnLock()
+	table.aboutToDeleteItem = nil
+}
+
+
+func (table *CacheTable) SetLogger(logger *log.Logger){
+	table.Lock()
+	defer table.UnLock()
+	table.logger = logger
+}
+
+func (table *CacheTable) expirationCheck(){
+	table.Lock()
+	if table.cleanupTimer != nil {
+		table.cleanupTimer.Stop()
+	}
+	if table.cleanupInterval  > 0 {
+		table.log("Expiration check triggered after", table.cleanupInterval, "for table", table.name)
+	} else {
+		table.log("Expiration check installed for table", table.name)
+	}
+
+
+	now := time.Now()
+	
+
+}
