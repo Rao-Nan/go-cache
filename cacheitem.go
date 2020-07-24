@@ -12,9 +12,9 @@ type CacheItem struct {
 
 	data interface{}
 
-	liftSpan time.Duration
+	lifeSpan time.Duration
 
-	createOn time.Time
+	createdOn time.Time
 
 	accessedOn time.Time
 
@@ -24,10 +24,10 @@ type CacheItem struct {
 }
 
 func NewCacheItem(key interface{}, lifeSpan time.Duration, data interface{}) *CacheItem {
-	t := time.Now()()
+	t := time.Now()
 	return &CacheItem{
 		key:           key,
-		liftSpan:      lifeSpan,
+		lifeSpan:      lifeSpan,
 		createdOn:     t,
 		accessedOn:    t,
 		accessCount:   0,
@@ -44,11 +44,11 @@ func (item *CacheItem) KeepAlive() {
 	item.accessCount++
 }
 
-func (item *CacheItem) LiftSpan() time.Duration {
-	return item.liftSpan
+func (item *CacheItem) LifeSpan() time.Duration {
+	return item.lifeSpan
 }
 
-func (item *CacheItem) accessedOn() time.Time {
+func (item *CacheItem) AccessedOn() time.Time {
 	item.RLock()
 	defer item.RUnlock()
 	return item.accessedOn
